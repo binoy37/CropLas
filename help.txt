@@ -1,0 +1,12 @@
+ref: https://towardsdatascience.com/guide-to-real-time-visualisation-of-massive-3d-point-clouds-in-python-ea6f00241ee0
+dataset: https://drive.google.com/file/d/1DUEy-gayYudkuJUou_cfNmPAmwdbbgml/view?usp=sharing
+
+python help
+laspy:
+    pip install laspy
+    pip install lazrs
+    https://laspy.readthedocs.io/en/latest/index.html
+open3D:
+    pip install open3d
+    Supports python versions 3.7 to 3.10 only
+    http://www.open3d.org/

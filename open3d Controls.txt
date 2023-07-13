@@ -1,0 +1,74 @@
+ref: http://www.open3d.org/docs/0.12.0/tutorial/visualization/visualization.html
+
+[visualization.Visualizer] 
+-- Mouse view control --
+  Left button + drag         : Rotate.
+  Ctrl + left button + drag  : Translate.
+  Wheel button + drag        : Translate.
+  Shift + left button + drag : Roll.
+  Wheel                      : Zoom in/out.
+-- Keyboard view control --
+  [/]          : Increase/decrease field of view.
+  R            : Reset view point.
+  Ctrl/Cmd + C : Copy current view status into the clipboard.
+  Ctrl/Cmd + V : Paste view status from clipboard.
+-- General control --
+  Q, Esc       : Exit window.
+  H            : Print help message.
+  P, PrtScn    : Take a screen capture.
+  D            : Take a depth capture.
+  O            : Take a capture of current rendering settings.
+  Alt + Enter  : Toggle between full screen and windowed mode.
+-- Render mode control --
+  L            : Turn on/off lighting.
+  +/-          : Increase/decrease point size.
+  Ctrl + +/-   : Increase/decrease width of geometry::LineSet.
+  N            : Turn on/off point cloud normal rendering.
+  S            : Toggle between mesh flat shading and smooth shading.
+  W            : Turn on/off mesh wireframe.
+  B            : Turn on/off back face rendering.
+  I            : Turn on/off image zoom in interpolation.
+  T            : Toggle among image render:
+                 no stretch / keep ratio / freely stretch.
+-- Color control --
+  0..4,9       : Set point cloud color option.
+                 0 - Default behavior, render point color.
+                 1 - Render point color.
+                 2 - x coordinate as color.
+                 3 - y coordinate as color.
+                 4 - z coordinate as color.
+                 9 - normal as color.
+  Ctrl + 0..4,9: Set mesh color option.
+                 0 - Default behavior, render uniform gray color.
+                 1 - Render point color.
+                 2 - x coordinate as color.
+                 3 - y coordinate as color.
+                 4 - z coordinate as color.
+                 9 - normal as color.
+  Shift + 0..4 : Color map options.
+                 0 - Gray scale color.
+                 1 - JET color map.
+                 2 - SUMMER color map.
+                 3 - WINTER color map.
+                 4 - HOT color map.
+
+[visualization.VisualizerWithEditing]
+-- Editing control --
+  F            : Enter freeview mode.
+  X            : Enter orthogonal view along X axis, press again to flip.
+  Y            : Enter orthogonal view along Y axis, press again to flip.
+  Z            : Enter orthogonal view along Z axis, press again to flip.
+  K            : Lock / unlock camera.
+  Ctrl + D     : Downsample point cloud with a voxel grid.
+  Ctrl + R     : Reset geometry to its initial state.
+  Shift + +/-  : Increase/decrease picked point size..
+  Shift + mouse left button   : Pick a point and add in queue.
+  Shift + mouse right button  : Remove last picked point from queue.
+
+-- When camera is locked --
+  Mouse left button + drag    : Create a selection rectangle.
+  Ctrl + mouse buttons + drag : Hold Ctrl key to draw a selection polygon.
+                                Left mouse button to add point.
+				                Right mouse button to remove point.
+  				                Release Ctrl key to close the polygon.
+  C                           : Crop the geometry with selection region.
