@@ -23,10 +23,25 @@ def print_las_info(las):  # Print las details
     return
 
 
-def create_geometry(points, colors, normals=None, view=False):
+def check_dimension(las, dimension_name):   # Check for given dimension name
+    presence = False
+    for dim in las.point_format.dimensions:
+        if dim.name == dimension_name:
+            presence = True
+            break
+    print("")
+    if presence is False:
+        print(dimension_name, "is not present.")
+    else:
+        print(dimension_name, "is present.")
+    return presence
+
+
+def create_geometry(points, colors=None, normals=None, view=False):
     point_cloud = o3d.geometry.PointCloud()
     point_cloud.points = o3d.utility.Vector3dVector(points)
-    point_cloud.colors = o3d.utility.Vector3dVector(colors/65535)
+    if colors is not None:
+        point_cloud.colors = o3d.utility.Vector3dVector(colors/65535)
     if normals is not None:
         point_cloud.normals = o3d.utility.Vector3dVector(normals)
     if view is True:
