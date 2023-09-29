@@ -91,7 +91,7 @@ def crop_geometry(point_cloud, picked_points=None):
     return cropped_point_cloud
 
 
-# TODO: Add more dimensions like colors etc
+# TODO: Test adding dimensions colors and normals
 def save_las(cropped_point_cloud, file_name, source_las, view=False):
     if view is True:
         disp_geometry(cropped_point_cloud)
@@ -102,5 +102,20 @@ def save_las(cropped_point_cloud, file_name, source_las, view=False):
     las.x = np.asarray(cropped_point_cloud.points)[:, 0]
     las.y = np.asarray(cropped_point_cloud.points)[:, 1]
     las.z = np.asarray(cropped_point_cloud.points)[:, 2]
+
+    if hasattr(cropped_point_cloud, 'colors'):
+        colors = np.asarray(cropped_point_cloud.colors)
+        if colors.shape[0] != 0:
+            las.red = colors[:, 0]
+            las.green = colors[:, 1]
+            las.blue = colors[:, 2]
+
+    if hasattr(cropped_point_cloud, 'normals'):
+        normals = np.asarray(cropped_point_cloud.normals)
+        if normals.shape[0] != 0:
+            las.normalx = normals[:, 0]
+            las.normaly = normals[:, 1]
+            las.normalz = normals[:, 2]
+
     las.write(file_name)
     return
