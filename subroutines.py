@@ -37,20 +37,6 @@ def check_dimension(las, dimension_name):   # Check for given dimension name
     return presence
 
 
-def check_dimension(las, dimension_name):  # Check for given dimension name
-    presence = False
-    for dim in las.point_format.dimensions:
-        if dim.name == dimension_name:
-            presence = True
-            break
-    print("")
-    if presence is False:
-        print(dimension_name, "is not present.")
-    else:
-        print(dimension_name, "is present.")
-    return presence
-
-
 def get_points(las, sampling_factor=1):
     points = las.xyz
     points = points[::sampling_factor]
