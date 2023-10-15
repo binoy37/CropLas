@@ -37,6 +37,36 @@ def check_dimension(las, dimension_name):   # Check for given dimension name
     return presence
 
 
+def check_dimension(las, dimension_name):  # Check for given dimension name
+    presence = False
+    for dim in las.point_format.dimensions:
+        if dim.name == dimension_name:
+            presence = True
+            break
+    print("")
+    if presence is False:
+        print(dimension_name, "is not present.")
+    else:
+        print(dimension_name, "is present.")
+    return presence
+
+
+def get_points(las, sampling_factor=1):
+    points = las.xyz
+    points = points[::sampling_factor]
+    if check_dimension(las, 'red'):
+        colors = np.vstack((las.red, las.green, las.blue)).transpose()
+        colors = colors[::sampling_factor]
+    else:
+        colors = None
+    if check_dimension(las, 'normalx'):
+        normals = np.vstack((las.normalx, las.normaly, las.normalz)).transpose()
+        normals = normals[::sampling_factor]
+    else:
+        normals = None
+    return points, colors, normals
+
+
 def create_geometry(points, colors=None, normals=None, view=False):
     point_cloud = o3d.geometry.PointCloud()
     point_cloud.points = o3d.utility.Vector3dVector(points)
@@ -67,7 +97,7 @@ def pick_points(point_cloud):  # Pick few points
     return picked_points
 
 
-def crop_geometry(point_cloud, picked_points=None):
+def crop_geometry(point_cloud):
     print("\n1) Please crop the required volume by Ctrl + mouse buttons")
     print("2) Press K to Lock / unlock camera")
     print("3) Hold Ctrl key to draw a selection polygon")
@@ -79,9 +109,6 @@ def crop_geometry(point_cloud, picked_points=None):
     vis = o3d.visualization.VisualizerWithEditing()
     vis.create_window()
     vis.add_geometry(point_cloud)
-    # if picked_points is not None:
-    # TODO: Create and add a geometry picked_points.
-    # then vis.update_geometry(picked_points)
     vis.run()  # user crops
     vis.destroy_window()
     cropped_point_cloud = vis.get_cropped_geometry()
@@ -91,26 +118,25 @@ def crop_geometry(point_cloud, picked_points=None):
     return cropped_point_cloud
 
 
-# TODO: Test adding dimensions colors and normals
 def save_las(cropped_point_cloud, file_name, source_las, view=False):
     if view is True:
         disp_geometry(cropped_point_cloud)
+    # TODO: Check whether creating LasData from the header of the source file is better or not
+    # las = lp.LasData(source_las.header)
     header = lp.LasHeader(point_format=source_las.point_format, version=source_las.header.version)
     las = lp.LasData(header)
-    # TODO: Create LasData from the header of the source file
-    # las = lp.LasData(source_las.header)
     las.x = np.asarray(cropped_point_cloud.points)[:, 0]
     las.y = np.asarray(cropped_point_cloud.points)[:, 1]
     las.z = np.asarray(cropped_point_cloud.points)[:, 2]
 
-    if hasattr(cropped_point_cloud, 'colors'):
+    if hasattr(cropped_point_cloud, 'colors'):  # cropped_point_cloud.has_colors() ??
         colors = np.asarray(cropped_point_cloud.colors)
         if colors.shape[0] != 0:
-            las.red = colors[:, 0]
-            las.green = colors[:, 1]
-            las.blue = colors[:, 2]
+            las.red   = colors[:, 0] * 65535
+            las.green = colors[:, 1] * 65535
+            las.blue  = colors[:, 2] * 65535
 
-    if hasattr(cropped_point_cloud, 'normals'):
+    if hasattr(cropped_point_cloud, 'normals'):  # cropped_point_cloud.has_normals() ??
         normals = np.asarray(cropped_point_cloud.normals)
         if normals.shape[0] != 0:
             las.normalx = normals[:, 0]
